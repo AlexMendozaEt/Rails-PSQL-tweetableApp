@@ -3,7 +3,7 @@
 <div id="tweets">
   <% @tweets.reverse().each do |tweet| %>
     <div>
-      <% @user.each do |user| %>
+      <% @users.each do |user| %>
         <div>
           <%= link_to user do %>
             <% if user.id == tweet.user_id%>
@@ -35,8 +35,19 @@
     </p>
 
     <p>
-      <strong>Likes count:</strong>
-      <%= tweet.likes_count %>
+      <% if user_signed_in?%>
+        <% like = Like.find_by(tweet_id: tweet.id, user_id: current_user.id) %>
+          <% if like%>
+            <%= button_to 'Unlike', url_for(controller: 'likes', action: 'destroy', id: like.id, tweet_id: tweet.id), method: :delete, remote: true %>
+            <%= @likes.where(tweet_id: tweet.id).size %> 
+          <% else %>
+            <%= button_to 'Like', url_for(controller: 'likes', action: 'create', tweet_id: tweet.id), method: :post, remote: true %>
+            <%= @likes.where(tweet_id: tweet.id).size %> 
+          <% end %>
+      <% else %>
+      <span>Likes </span >
+      <%= @likes.where(tweet_id: tweet.id).size %> 
+      <% end %>
     </p>
   <% end %>
 </div>

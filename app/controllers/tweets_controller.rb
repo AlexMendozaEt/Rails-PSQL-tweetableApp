@@ -16,7 +16,8 @@ class TweetsController < ApplicationController
   def new
     @tweets = Tweet.all
     @tweet = Tweet.new
-    @user = User.all
+    @users = User.all
+    @likes = Like.all
   end
 
   # GET /tweets/1/edit
