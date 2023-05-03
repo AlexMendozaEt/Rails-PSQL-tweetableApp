@@ -7,11 +7,16 @@ class TweetsController < ApplicationController
   end
 
   # GET /tweets/1
-  def show; end
+  def show
+    @tweets = Tweet.all
+    @user = User.all
+  end
 
   # GET /tweets/new
   def new
+    @tweets = Tweet.all
     @tweet = Tweet.new
+    @user = User.all
   end
 
   # GET /tweets/1/edit
@@ -21,7 +26,7 @@ class TweetsController < ApplicationController
   def create
     @tweet = Tweet.new(tweet_params)
     if @tweet.save
-      redirect_to @tweet, notice: "Tweet was successfully created."
+      redirect_to new_tweet_path, notice: "Tweet was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +44,7 @@ class TweetsController < ApplicationController
   # DELETE /tweets/1
   def destroy
     @tweet.destroy
-    redirect_to tweets_url, notice: "Tweet was successfully destroyed."
+    redirect_to new_tweet_path, notice: "Tweet was successfully destroyed."
   end
 
   private
@@ -51,6 +56,6 @@ class TweetsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def tweet_params
-    params.require(:tweet).permit(:body, :replies_count, :likes_count, :user_id)
+    params.require(:tweet).permit(:body, :replied_to_id, :user_id)
   end
 end

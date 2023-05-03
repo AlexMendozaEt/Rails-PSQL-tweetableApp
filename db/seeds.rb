@@ -5,8 +5,8 @@ Tweet.destroy_all
 Like.destroy_all
 
 ActiveRecord::Base.connection.reset_pk_sequence!('users')
-ActiveRecord::Base.connection.reset_pk_sequence!('tweet')
-ActiveRecord::Base.connection.reset_pk_sequence!('like')
+ActiveRecord::Base.connection.reset_pk_sequence!('tweets')
+ActiveRecord::Base.connection.reset_pk_sequence!('likes')
 
 puts "Creating Users"
 user1 = User.create(username: "user1", name: "user1", email: "user1@mail.com", password: "qwerty")
@@ -21,9 +21,11 @@ user2.avatar.attach(io: File.open("app/assets/images/icons_avatars/user2_icon.pn
 user3.avatar.attach(io: File.open("app/assets/images/icons_avatars/user3_icon.png"), filename:"user3_icon.png")
 user4.avatar.attach(io: File.open("app/assets/images/icons_avatars/user4_icon.png"), filename:"user4_icon.png")
 admin.avatar.attach(io: File.open("app/assets/images/icons_avatars/admin_icon.png"), filename:"admin_icon.png")
-puts "Creating Users Twetts"
+puts "Creating Users Tweets"
 tweet1 = Tweet.create(body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus mi nisl, nec consectetur nulla tristique in. Sed at neque et justo vel.", user_id: 1)
 tweet2 = Tweet.create(body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus mi nisl, nec consectetur nulla tristique in. Sed at neque et justo vel.", user_id: 2)
 tweet3 = Tweet.create(body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus mi nisl, nec consectetur nulla tristique in. Sed at neque et justo vel.", user_id: 3)
 tweet4 = Tweet.create(body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus mi nisl, nec consectetur nulla tristique in. Sed at neque et justo vel.", user_id: 4)
+tweet5 = Tweet.create(body: "replied 1", user_id: 2, replied_to_id: 1)
+tweet6 = Tweet.create(body: "replied 2", user_id: 1, replied_to_id: 2)
 puts "End Seeding"

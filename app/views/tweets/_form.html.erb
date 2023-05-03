@@ -5,7 +5,21 @@
     <%= form.text_area :body %>
   </div>
 
+    <div>
+    <%= form.label :user_id, style: "display: block" %>
+    <%= form.text_field :user_id %>
+  </div>
+
+      <div>
+    <%= form.label :replied_to_id, style: "display: block" %>
+    <%= form.text_field :replied_to_id %>
+  </div>
+
   <div>
-    <%= form.submit %>
+    <% if tweet[:body].nil? %>
+    <%= form.submit :Tweet %>
+    <% else %>
+    <%= form.submit :Update %>
+    <% end %>
   </div>
 <% end %>

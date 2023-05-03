@@ -1,9 +1,42 @@
-<h1>New tweet</h1>
-
 <%= render "form", tweet: @tweet %>
 
-<br>
+<div id="tweets">
+  <% @tweets.reverse().each do |tweet| %>
+    <div>
+      <% @user.each do |user| %>
+        <div>
+          <%= link_to user do %>
+            <% if user.id == tweet.user_id%>
+              <%if user.avatar.attached?%>
+                <div >
+                  <%= image_tag user.avatar%>
+                </div>
+              <%else%>
+                <div >
+                  <%= image_tag "icons_avatars/unknow_icon.png"%>
+                </div>
+              <%end%>
+              <%= user.name%>
+              @<%= user.username%>
+            <%end%>
+          <% end %>
+        </div>
+      <% end %>
+      <%= link_to tweet do %>
+        <div>
+          <%= time_ago_in_words(tweet.created_at) %> ago
+          <%= tweet.body %>
+        </div>
+      <% end %>
+    </div>
+    <p>
+      <strong>Replies count:</strong>
+      <%= tweet.replies_count %>
+    </p>
 
-<div>
-  <%= link_to "Back to tweets", tweets_path %>
+    <p>
+      <strong>Likes count:</strong>
+      <%= tweet.likes_count %>
+    </p>
+  <% end %>
 </div>
