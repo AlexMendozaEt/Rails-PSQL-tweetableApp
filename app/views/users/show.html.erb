@@ -1,10 +1,55 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @user %>
+<h2> Profile </h2>
+
+<div id="users">
+    <%if @user.avatar.attached?%>
+      <div >
+        <%= image_tag @user.avatar%>
+      </div>
+    <%else%>
+      <div >
+        <%= image_tag "icons_avatars/unknow_icon.png"%>
+      </div>
+    <%end%>
+    <%= @user.name%>
+    ESTE ES EL ID ====> <%= @user.id%>
+    @<%= @user.username %>
+    Joined on <%= @user.created_at.strftime("%B %d, %Y") %> ago
+</div>
 
 <div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
+  <%= link_to "Edit this user", edit_user_path(@user) %>
+</div>
 
-  <%= button_to "Destroy this user", @user, method: :delete %>
+
+<div>
+  <% @tweets.reverse().each do |tweet|%>
+    <% if tweet.user_id == @user.id%>
+      <div>
+        <%if @user.avatar.attached?%>
+          <div >
+            <%= image_tag @user.avatar%>
+          </div>
+        <%else%>
+          <div >
+            <%= image_tag "icons_avatars/unknow_icon.png"%>
+          </div>
+        <%end%>
+        <%= @user.name %>
+        @<%= @user.name %>
+        <% if tweet.created_at == tweet.updated_at%>
+        <%= time_ago_in_words(tweet.created_at) %> ago
+        <% else %>
+        Edited <%= time_ago_in_words(tweet.updated_at) %> ago
+        <% end %>
+        <%= tweet.body%>
+      </div>
+    <div>
+  <%= link_to "Edit this tweet", edit_tweet_path(tweet.id) %> |
+  <%= button_to "Destroy this tweet", tweet, method: :delete %>
+    </div>
+    <% end %>
+    
+  <% end %>
 </div>

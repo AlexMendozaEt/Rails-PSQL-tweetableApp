@@ -7,7 +7,9 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1
-  def show; end
+  def show
+    @tweets = Tweet.all
+  end
 
   # GET /users/new
   def new
