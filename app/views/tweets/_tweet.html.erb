@@ -28,7 +28,7 @@
     </div>
     <p>
       <strong>Replies count:</strong>
-      <%= tweet.replies_count %>
+      <%= @tweets.where(replied_to_id: tweet.id).size %>
     </p>
 
     <p>
