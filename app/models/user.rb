@@ -5,6 +5,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_one_attached :avatar
 
+  has_many :tweets, dependent: :destroy
+  has_many :likes, dependent: :destroy
+
   validates :email, presence: true, format: {
     with: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i,
     message: "only email format"
