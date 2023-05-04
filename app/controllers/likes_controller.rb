@@ -5,7 +5,7 @@ class LikesController < ApplicationController
     @tweet = Tweet.find(params[:tweet_id])
     @like = current_user.likes.build(tweet: @tweet)
     if @like.save
-      render :new, status: :ok
+      redirect_back(fallback_location: root_path)
     else
       render :new, status: :unprocessable_entity
     end
@@ -15,7 +15,7 @@ class LikesController < ApplicationController
     @tweet = Tweet.find(params[:tweet_id])
     @like = current_user.likes.find_by(tweet: @tweet)
     if @like.destroy
-      render :new, status: :ok
+      redirect_back(fallback_location: root_path)
     else
       render :new, status: :unprocessable_entity
     end

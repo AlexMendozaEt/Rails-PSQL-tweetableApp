@@ -18,8 +18,7 @@
   <% @tweets.reverse().each do |tweet|%>
       <% if tweet.replied_to_id == @tweet.id%>
         <%= render tweet%>
-      <% end %>
-          <div>
+                  <div>
       <% if user_signed_in?%>
         <% like = Like.find_by(tweet_id: tweet.id, user_id: current_user.id) %>
           <% if like%>
@@ -34,5 +33,6 @@
       <%= @likes.where(tweet_id: tweet.id).size %> 
       <% end %>
     </div>
+      <% end %>
   <% end %>
 </div>

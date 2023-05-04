@@ -13,17 +13,18 @@
       </div>
     <%end%>
     <%= @user.name%>
-    ESTE ES EL ID ====> <%= @user.id%>
     @<%= @user.username %>
     Joined on <%= @user.created_at.strftime("%B %d, %Y") %> ago
 </div>
 
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %>
-</div>
+<% if !current_user.nil? && current_user.id == @user.id%>
+  <div>
+    <%= link_to "Edit this user", edit_user_path(@user) %>
+  </div>
+<% end %>
 
-
 <div>
+  <h3> Tweets(<%= Tweet.where(user_id: @user.id).count %>) </h3>
   <% @tweets.reverse().each do |tweet|%>
     <% if tweet.user_id == @user.id%>
       <div>
@@ -45,11 +46,51 @@
         <% end %>
         <%= tweet.body%>
       </div>
-    <div>
-  <%= link_to "Edit this tweet", edit_tweet_path(tweet.id) %> |
-  <%= button_to "Destroy this tweet", tweet, method: :delete %>
-    </div>
+      <% if !current_user.nil? && current_user.id == @user.id%>
+        <div>
+          <%= link_to "Edit this tweet", edit_tweet_path(tweet.id) %> |
+          <%= button_to "Destroy this tweet", tweet, method: :delete %>
+        </div>
+      <% end %>
     <% end %>
-    
   <% end %>
+</div>
+
+<div>
+
+<% likes = Like.where(user_id: @user.id) %>
+<h3> Likes(<%= likes.count%>)
+</h3>
+<% likes.reverse().each do |like| %>
+          <% likeTweets = Tweet.where(id: like.tweet_id)%>
+            <% likeTweets.each do |likeTweet| %>
+              <% user = User.where(id: likeTweet.user_id)%>
+              <% user.each do |users|%>
+                <%if users.avatar.attached?%>
+                  <div >
+                    <%= image_tag users.avatar%>
+                  </div>
+                <%else%>
+                  <div >
+                    <%= image_tag "icons_avatars/unknow_icon.png"%>
+                  </div>
+                <%end%>
+                <%= users.name %>
+                @<%= users.name %>
+                <% if likeTweet.created_at == likeTweet.updated_at%>
+                <%= time_ago_in_words(likeTweet.created_at) %> ago
+                <% else %>
+                Edited <%= time_ago_in_words(likeTweet.updated_at) %> ago
+                <% end %>
+                <%= likeTweet.body%>
+                </div>
+                <% if !current_user.nil? && current_user.id == users.id%>
+                  <div>
+                    <%= link_to "Edit this tweet", edit_tweet_path(likeTweet.id) %> |
+                    <%= button_to "Destroy this tweet", likeTweet, method: :delete %>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+      <%end %>
 </div>
