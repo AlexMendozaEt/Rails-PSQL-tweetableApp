@@ -1,4 +1,6 @@
-<%= render "form", tweet: @tweet %>
+<% if user_signed_in?%>
+  <%= render "form", tweet: @tweet, replied_to_id: nil %>
+<% end %>
 
 <div id="tweets">
   <% @tweets.reverse().each do |tweet| %>

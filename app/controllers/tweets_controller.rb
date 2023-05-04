@@ -10,6 +10,7 @@ class TweetsController < ApplicationController
   def show
     @tweets = Tweet.all
     @user = User.all
+    @tweetnew = Tweet.new
   end
 
   # GET /tweets/new
@@ -26,6 +27,7 @@ class TweetsController < ApplicationController
   # POST /tweets
   def create
     @tweet = Tweet.new(tweet_params)
+    @tweet[:user_id] = current_user.id
     if @tweet.save
       redirect_to new_tweet_path, notice: "Tweet was successfully created."
     else

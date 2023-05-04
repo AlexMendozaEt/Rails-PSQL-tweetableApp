@@ -4,6 +4,10 @@
 
 <%= render @tweet %>
 
+<% if user_signed_in?%>
+  <%= render "form", tweet: @tweetnew, replied_to_id: @tweet.id %>
+<% end %>
+
 <div>
   <%= link_to "Edit this tweet", edit_tweet_path(@tweet) %> |
 

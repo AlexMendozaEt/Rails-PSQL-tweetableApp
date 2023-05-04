@@ -1,18 +1,10 @@
 <%= form_with(model: tweet) do |form| %>
-
+  <%if replied_to_id %>
+  <%= form.hidden_field :replied_to_id, value: replied_to_id %>
+  <% end %>
   <div>
     <%= form.label :body, style: "display: block" %>
     <%= form.text_area :body %>
-  </div>
-
-    <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
-  </div>
-
-      <div>
-    <%= form.label :replied_to_id, style: "display: block" %>
-    <%= form.text_field :replied_to_id %>
   </div>
 
   <div>
