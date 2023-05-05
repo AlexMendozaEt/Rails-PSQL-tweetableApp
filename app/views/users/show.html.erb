@@ -19,7 +19,7 @@
 
 <% if (!current_user.nil? && current_user.id == @user.id) || current_user.admin? %>
   <div>
-    <%= link_to "Edit this user", edit_user_path(@user) %>
+    <%= link_to "Edit this user", edit_user_registration_path %>
   </div>
 <% end %>
 

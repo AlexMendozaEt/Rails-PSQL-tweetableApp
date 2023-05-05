@@ -3,22 +3,47 @@
 <h2>Tweet Detail</h2>
 
 <%= render @tweet %>
+    <div>
+      <% if user_signed_in?%>
+        <% like = Like.find_by(tweet_id: @tweet.id, user_id: current_user.id) %>
+          <% if like%>
+            <%= button_to 'Unlike', url_for(controller: 'likes', action: 'destroy', id: like.id, tweet_id: @tweet.id), method: :delete, remote: true %>
+            <%= @likes.where(tweet_id: @tweet.id).size %> 
+          <% else %>
+            <%= button_to 'Like', url_for(controller: 'likes', action: 'create', tweet_id: @tweet.id), method: :post, remote: true %>
+            <%= @likes.where(tweet_id: @tweet.id).size %> 
+          <% end %>
+      <% else %>
+      <span>Likes </span >
+      <%= @likes.where(tweet_id: tweet.id).size %> 
+      <% end %>
+    </div>
+
+<% if (user_signed_in? && @tweet.user_id == current_user.id) || current_user.admin? %>
+  <div>
+    <%= link_to "Edit this tweet", edit_tweet_path(@tweet) %> |
+
+    <%= button_to "Destroy this tweet", @tweet, method: :delete %>
+  </div>
+<% end %>
 
 <% if user_signed_in?%>
   <%= render "form", tweet: @tweetnew, replied_to_id: @tweet.id %>
 <% end %>
 
-<div>
-  <%= link_to "Edit this tweet", edit_tweet_path(@tweet) %> |
-
-  <%= button_to "Destroy this tweet", @tweet, method: :delete %>
-</div>
 
 <div id="replies">
   <% @tweets.reverse().each do |tweet|%>
       <% if tweet.replied_to_id == @tweet.id%>
         <%= render tweet%>
-                  <div>
+        <% if (user_signed_in? && tweet.user_id == current_user.id) || current_user.admin? %>
+        <div>
+          <%= link_to "Edit this tweet", edit_tweet_path(tweet) %> |
+
+          <%= button_to "Destroy this tweet", tweet, method: :delete %>
+        </div>
+      <% end %>
+    <div>
       <% if user_signed_in?%>
         <% like = Like.find_by(tweet_id: tweet.id, user_id: current_user.id) %>
           <% if like%>

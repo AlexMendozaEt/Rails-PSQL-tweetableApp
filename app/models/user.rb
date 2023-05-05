@@ -17,7 +17,7 @@ class User < ApplicationRecord
 
   validates :name, presence: true
 
-  validates :password, length: { minimum: 6 }
+  validates :password, length: { minimum: 6 }, allow_blank: true
 
   enum role: { user: 0, admin: 1 }
 end

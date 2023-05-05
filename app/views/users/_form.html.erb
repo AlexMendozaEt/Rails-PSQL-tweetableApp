@@ -11,24 +11,37 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+  <div class="field">
+    <%= form.label :username %><br />
+    <%= form.text_field :username, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :email %><br />
+    <%= form.email_field :email, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %><br />
+    <%= form.text_field :name, autocomplete: "off"  %>
   </div>
 
   <div>
-    <%= form.label :username, style: "display: block" %>
-    <%= form.text_field :username %>
+    <%= form.label :avatar, style: "display: block" %>
+    <%= form.file_field :avatar %>
   </div>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="field">
+    <%= form.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= form.password_field :password, autocomplete: "new-password" %>
   </div>
 
-  <div>
-    <%= form.label :role, style: "display: block" %>
-    <%= form.number_field :role %>
+  <div class="field">
+    <%= form.label :password_confirmation %><br />
+    <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
   <div>

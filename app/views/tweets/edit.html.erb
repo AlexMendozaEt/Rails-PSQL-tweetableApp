@@ -1,10 +1,12 @@
 <h1>Edit Tweet</h1>
 
-<%= render "form", tweet: @tweet %>
+<%= form_with(model: @tweet) do |form| %>
+  <div>
+    <%= form.label :body, style: "display: block" %>
+    <%= form.text_area :body %>
+  </div>
 
-<br>
-
-<div>
-  <%= link_to "Show this tweet", @tweet %> |
-  <%= link_to "Back to tweets", tweets_path %>
-</div>
+  <div>
+    <%= form.submit :Update %>
+  </div>
+<% end %>
