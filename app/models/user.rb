@@ -18,4 +18,6 @@ class User < ApplicationRecord
   validates :name, presence: true
 
   validates :password, length: { minimum: 6 }
+
+  enum role: { user: 0, admin: 1 }
 end

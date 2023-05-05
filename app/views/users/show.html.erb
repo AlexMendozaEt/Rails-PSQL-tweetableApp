@@ -17,7 +17,7 @@
     Joined on <%= @user.created_at.strftime("%B %d, %Y") %> ago
 </div>
 
-<% if !current_user.nil? && current_user.id == @user.id%>
+<% if (!current_user.nil? && current_user.id == @user.id) || current_user.admin? %>
   <div>
     <%= link_to "Edit this user", edit_user_path(@user) %>
   </div>
@@ -46,7 +46,7 @@
         <% end %>
         <%= tweet.body%>
       </div>
-      <% if !current_user.nil? && current_user.id == @user.id%>
+      <% if (!current_user.nil? && current_user.id == @user.id) || current_user.admin?%>
         <div>
           <%= link_to "Edit this tweet", edit_tweet_path(tweet.id) %> |
           <%= button_to "Destroy this tweet", tweet, method: :delete %>
@@ -84,7 +84,7 @@
                 <% end %>
                 <%= likeTweet.body%>
                 </div>
-                <% if !current_user.nil? && current_user.id == users.id%>
+                <% if (!current_user.nil? && current_user.id == users.id) || current_user.admin?%>
                   <div>
                     <%= link_to "Edit this tweet", edit_tweet_path(likeTweet.id) %> |
                     <%= button_to "Destroy this tweet", likeTweet, method: :delete %>
