@@ -47,7 +47,9 @@ class TweetsController < ApplicationController
 
   # DELETE /tweets/1
   def destroy
+    @tweet = Tweet.find(params[:id])
     @tweet.destroy
+
     redirect_to new_tweet_path, notice: "Tweet was successfully destroyed."
   end
 

@@ -19,7 +19,7 @@
       <% end %>
     </div>
 
-<% if (user_signed_in? && @tweet.user_id == current_user.id) || current_user.admin? %>
+<% if user_signed_in? && ((tweet.user_id == current_user.id) || (current_user.present? && current_user.admin?)) %>
   <div>
     <%= link_to "Edit this tweet", edit_tweet_path(@tweet) %> |
 
@@ -36,7 +36,7 @@
   <% @tweets.reverse().each do |tweet|%>
       <% if tweet.replied_to_id == @tweet.id%>
         <%= render tweet%>
-        <% if (user_signed_in? && tweet.user_id == current_user.id) || current_user.admin? %>
+      <% if user_signed_in? && ((tweet.user_id == current_user.id) || (current_user.present? && current_user.admin?)) %>
         <div>
           <%= link_to "Edit this tweet", edit_tweet_path(tweet) %> |
 
