@@ -16,8 +16,8 @@ class TweetsController < ApplicationController
 
   # GET /tweets/new
   def new
-    @tweets = Tweet.all
     @tweet = Tweet.new
+    @tweets = Tweet.all
     @users = User.all
     @likes = Like.all
   end
@@ -30,7 +30,7 @@ class TweetsController < ApplicationController
     @tweet = Tweet.new(tweet_params)
     @tweet[:user_id] = current_user.id
     if @tweet.save
-      redirect_to new_tweet_path, notice: "Tweet was successfully created."
+      redirect_to request.referer, notice: "Tweet was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -50,7 +50,7 @@ class TweetsController < ApplicationController
     @tweet = Tweet.find(params[:id])
     @tweet.destroy
 
-    redirect_to new_tweet_path, notice: "Tweet was successfully destroyed."
+    redirect_to request.referer, notice: "Tweet was successfully destroyed."
   end
 
   private

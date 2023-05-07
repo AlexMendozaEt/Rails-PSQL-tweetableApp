@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     @tweets = Tweet.all
+    @likes = Like.all
   end
 
   # GET /users/new

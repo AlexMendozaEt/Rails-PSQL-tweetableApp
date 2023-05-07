@@ -1,12 +1,15 @@
-<h1>Edit Tweet</h1>
+<h2 class= "home_text">Edit Tweet</h2>
 
 <%= form_with(model: @tweet) do |form| %>
-  <div>
-    <%= form.label :body, style: "display: block" %>
-    <%= form.text_area :body %>
-  </div>
+  <div class="box_father">
+    <div class="box_center">
+      <%= form.text_area :body, placeholder: "Remember to thing before write...", class: "new_tweet_box" %>
+    </div>
 
-  <div>
-    <%= form.submit :Update %>
+    <div class="box_tweet">
+      <div>
+        <%= form.submit :Update, class: "button_tweet"  %>
+      </div>
+    </div>
   </div>
 <% end %>

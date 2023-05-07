@@ -1,96 +1,182 @@
 <p style="color: green"><%= notice %></p>
 
-<h2> Profile </h2>
+<h2 class= "home_text"> Profile </h2>
 
 <div id="users">
     <%if @user.avatar.attached?%>
       <div >
-        <%= image_tag @user.avatar%>
+        <%= image_tag @user.avatar, class: "avatar_profile" %>
       </div>
     <%else%>
       <div >
-        <%= image_tag "icons_avatars/unknow_icon.png"%>
+        <%= image_tag "icons_avatars/unknow_icon.png", class: "avatar_profile" %>
       </div>
     <%end%>
-    <%= @user.name%>
-    @<%= @user.username %>
-    Joined on <%= @user.created_at.strftime("%B %d, %Y") %> ago
+    <%= tag.span @user.name, class: "user_name_profile" %>
+    <span class="user_name_profile_tag">@<%= tag.span @user.username %></span>
+    <span class="time_profile_text"> Joined on <%= @user.created_at.strftime("%B %d, %Y") %> </span>
 </div>
 
 <% if (!current_user.nil? && current_user.id == @user.id) || current_user.admin? %>
-  <div>
-    <%= link_to "Edit this user", edit_user_registration_path %>
+  <div class="edit_profile">
+    <%= link_to "EDIT PROFILE", edit_user_registration_path, class: "button_edit_profile" %>
   </div>
 <% end %>
 
-<div>
-  <h3> Tweets(<%= Tweet.where(user_id: @user.id).count %>) </h3>
-  <% @tweets.reverse().each do |tweet|%>
-    <% if tweet.user_id == @user.id%>
-      <div>
-        <%if @user.avatar.attached?%>
-          <div >
-            <%= image_tag @user.avatar%>
-          </div>
-        <%else%>
-          <div >
-            <%= image_tag "icons_avatars/unknow_icon.png"%>
-          </div>
-        <%end%>
-        <%= @user.name %>
-        @<%= @user.name %>
-        <% if tweet.created_at == tweet.updated_at%>
-        <%= time_ago_in_words(tweet.created_at) %> ago
-        <% else %>
-        Edited <%= time_ago_in_words(tweet.updated_at) %> ago
-        <% end %>
-        <%= tweet.body%>
-      </div>
-      <% if (!current_user.nil? && current_user.id == @user.id) || current_user.admin?%>
-        <div>
-          <%= link_to "Edit this tweet", edit_tweet_path(tweet.id) %> |
-          <%= button_to "Destroy this tweet",  tweet, method: :delete %>
-        </div>
-      <% end %>
-    <% end %>
-  <% end %>
-</div>
-
-<div>
-
-<% likes = Like.where(user_id: @user.id) %>
-<h3> Likes(<%= likes.count%>)
-</h3>
-<% likes.reverse().each do |like| %>
-          <% likeTweets = Tweet.where(id: like.tweet_id)%>
-            <% likeTweets.each do |likeTweet| %>
-              <% user = User.where(id: likeTweet.user_id)%>
-              <% user.each do |users|%>
-                <%if users.avatar.attached?%>
-                  <div >
-                    <%= image_tag users.avatar%>
-                  </div>
-                <%else%>
-                  <div >
-                    <%= image_tag "icons_avatars/unknow_icon.png"%>
-                  </div>
-                <%end%>
-                <%= users.name %>
-                @<%= users.name %>
-                <% if likeTweet.created_at == likeTweet.updated_at%>
-                <%= time_ago_in_words(likeTweet.created_at) %> ago
-                <% else %>
-                Edited <%= time_ago_in_words(likeTweet.updated_at) %> ago
+<div class="tabs">
+  <div class="tab">
+    <input type="radio" id="tab-1" name="tab-group-1" checked>
+        <label for="tab-1">Tweets(<%= Tweet.where(user_id: @user.id).count %>)</label>
+        <div class="content">
+          <% @tweets.reverse().each do |tweet| %>
+            <% if tweet.user_id == @user.id%>
+              <div class="tweet_box">
+                <%= link_to profile_path(@user.id) do %>
+                      <% if @user.id == tweet.user_id%>
+                        <%if @user.avatar.attached?%>
+                          <div class="user_flex">
+                            <%= image_tag @user.avatar, class: "avatar"%>
+                          </div>
+                        <%else%>
+                          <div >
+                            <%= image_tag "icons_avatars/unknow_icon.png", class: "avatar"%>
+                          </div>
+                        <%end%>
+                        <%= tag.span @user.name, class: "user_name" %>
+                        <span>@<%= tag.span  @user.username%></span>
+                      <%end%>
                 <% end %>
-                <%= likeTweet.body%>
-                </div>
-                <% if (!current_user.nil? && current_user.id == users.id) || current_user.admin?%>
+                <%= link_to tweet do %>
+                  <div class="time_text text_black">
+                    <%= tag.span time_ago_in_words(tweet.created_at).gsub(/about /, '') %> ago
+                  </div>
+                  <div class="text_black">
+                    <%= tag.span tweet.body %>
+                  </div>
+                <% end %>
+                <% if user_signed_in? && ((tweet.user_id == current_user.id) || (current_user.present? && current_user.admin?)) %>
                   <div>
-                    <%= link_to "Edit this tweet", edit_tweet_path(likeTweet.id) %> |
-                    <%= button_to "Destroy this tweet", likeTweet, method: :delete %>
+                    <%= button_to tweet, method: :delete, class: "icons_tweets delete_icon" do %>
+                      <%= image_tag 'Icon-delete.png' %>
+                    <% end %>
+
+                    <%= link_to edit_tweet_path(tweet), class: "icons_tweets edit_icon" do %>
+                      <%= image_tag 'Icon-edit.png' %>
+                    <% end %>
                   </div>
                 <% end %>
-              <% end %>
+                <%= link_to tweet do %>
+                  <div class="icon_tweet_comment">
+                    <%= image_tag 'Icon-coments.png' %>
+                    <%= @tweets.where(replied_to_id: tweet.id).size %>  
+                  </div>
+                <% end %>
+                <% if user_signed_in?%>
+                  <% like = Like.find_by(tweet_id: tweet.id, user_id: current_user.id) %>
+                    <% if like%>
+                      <div class="icon_tweet_like">
+                        <%= button_to url_for(controller: 'likes', action: 'destroy', id: like.id, tweet_id: tweet.id), method: :delete, remote: true, class: "icons_tweets"  do%>
+                          <%= image_tag 'Icon-unlike.png' %>
+                        <% end %>
+                        <%= @likes.where(tweet_id: tweet.id).size %> 
+                      </div>
+                    <% else %>
+                      <div class="icon_tweet_like">
+                        <%= button_to url_for(controller: 'likes', action: 'create', tweet_id: tweet.id), method: :post, remote: true, class: "icons_tweets" do %>
+                          <%= image_tag 'Icon-like.png' %>
+                        <% end %>
+                        <%= @likes.where(tweet_id: tweet.id).size %> 
+                      </div>
+                    <% end %>
+                <% else %>
+                  <div class="icon_tweet_like">
+                    <%= image_tag 'Icon-like.png' %>
+                    <%= @likes.where(tweet_id: tweet.id).size %> 
+                  </div>
+                <% end %>
+              </div>
             <% end %>
+          <% end %>
+        </div>
+    </div>
+    <div class="tab">
+    <input type="radio" id="tab-2" name="tab-group-1">
+    <label for="tab-2"><% likes = Like.where(user_id: @user.id) %> Likes(<%= likes.count%>)</label>
+    <div class="content">
+      <% likes.reverse().each do |like| %>
+        <% likeTweets = Tweet.where(id: like.tweet_id)%>
+          <% likeTweets.each do |likeTweet| %>
+            <% user = User.where(id: likeTweet.user_id)%>
+              <div class="tweet_box">
+                <% user.each do |users|%>
+                  <div>
+                  <%if users.avatar.attached?%>
+                    <div class="user_flex">
+                      <%= image_tag users.avatar, class: "avatar" %>
+                    </div>
+                  <%else%>
+                    <div class="user_flex">
+                      <%= image_tag "icons_avatars/unknow_icon.png", class: "avatar" %>
+                    </div>
+                  <%end%>
+                  <%= tag.span users.name, class: "user_name" %>
+                  <span>@<%= tag.span  users.username%></span>
+                  <% if likeTweet.created_at == likeTweet.updated_at%>
+                    <div class="time_text text_black">
+                      <%= tag.span time_ago_in_words(likeTweet.created_at).gsub(/about /, '') %> ago
+                    </div>
+                  <% else %>
+                    <div class="time_text text_black">
+                      Edited <%= tag.span time_ago_in_words(likeTweet.created_at).gsub(/about /, '') %> ago
+                    </div>
+                  <% end %>
+                  <div class="text_black">
+                    <%= tag.span likeTweet.body %>
+                  </div>
+                  <% if user_signed_in? && ((likeTweet.user_id == current_user.id) || (current_user.present? && current_user.admin?)) %>
+                    <div>
+                      <%= button_to likeTweet, method: :delete, class: "icons_tweets delete_icon" do %>
+                        <%= image_tag 'Icon-delete.png' %>
+                      <% end %>
+                      <%= link_to edit_tweet_path(likeTweet), class: "icons_tweets edit_icon" do %>
+                        <%= image_tag 'Icon-edit.png' %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                  <%= link_to likeTweet do %>
+                    <div class="icon_tweet_comment">
+                      <%= image_tag 'Icon-coments.png' %>
+                      <%= @tweets.where(replied_to_id: likeTweet.id).size %>  
+                    </div>
+                  <% end %>
+                  <% if user_signed_in?%>
+                    <% like = Like.find_by(tweet_id: likeTweet.id, user_id: current_user.id) %>
+                      <% if like%>
+                        <div class="icon_tweet_like">
+                          <%= button_to url_for(controller: 'likes', action: 'destroy', id: like.id, tweet_id: likeTweet.id), method: :delete, remote: true, class: "icons_tweets"  do%>
+                            <%= image_tag 'Icon-unlike.png' %>
+                          <% end %>
+                          <%= @likes.where(tweet_id: likeTweet.id).size %> 
+                        </div>
+                      <% else %>
+                        <div class="icon_tweet_like">
+                          <%= button_to url_for(controller: 'likes', action: 'create', tweet_id: likeTweet.id), method: :post, remote: true, class: "icons_tweets" do %>
+                            <%= image_tag 'Icon-like.png' %>
+                          <% end %>
+                          <%= @likes.where(tweet_id: likeTweet.id).size %> 
+                        </div>
+                      <% end %>
+                  <% else %>
+                    <div class="icon_tweet_like">
+                    <%= image_tag 'Icon-like.png' %>
+                    <%= @likes.where(tweet_id: tweet.id).size %> 
+                    </div>
+                  <% end %>
+                  </div>
+                <% end %>
+              </div>
+          <% end %>
       <%end %>
+    </div>
+  </div>
 </div>

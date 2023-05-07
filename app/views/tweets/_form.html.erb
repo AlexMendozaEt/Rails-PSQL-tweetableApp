@@ -2,16 +2,19 @@
   <%if replied_to_id %>
   <%= form.hidden_field :replied_to_id, value: replied_to_id %>
   <% end %>
-  <div>
-    <%= form.label :body, style: "display: block" %>
-    <%= form.text_area :body %>
-  </div>
+  <div class="box_father">
+    <div class="box_center">
+      <%= form.text_area :body, placeholder: "Remember to thing before write...", class: "new_tweet_box" %>
+    </div>
 
-  <div>
-    <% if tweet[:body].nil? %>
-    <%= form.submit :Tweet %>
-    <% else %>
-    <%= form.submit :Update %>
-    <% end %>
+    <div class="box_tweet">
+      <div>
+        <% if tweet[:body].nil? %>
+          <%= form.submit :Tweet, class: "button_tweet" %>
+        <% else %>
+          <%= form.submit :Update, class: "button_tweet" %>
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>
